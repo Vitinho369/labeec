@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LABEEC - Laboratório de Ecologia de Crustáceos | UFRN</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            /* Smooth scrolling for anchor links */
+        }
+
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Basic animation for hero section elements */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-down {
+            animation: fadeInDown 1s ease-out forwards;
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        /* Delay animations for a staggered effect */
+        .animate-fade-in-down {
+            animation-delay: 0.2s;
+        }
+
+        .animate-fade-in-up {
+            animation-delay: 0.4s;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out forwards;
+            animation-delay: 0.6s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Help Bot Styles */
+        #help-bot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        #help-bot-button {
+            background-color: #2563eb;
+            /* blue-600 */
+            color: white;
+            padding: 1rem;
+            border-radius: 9999px;
+            /* full rounded */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        #help-bot-button:hover {
+            transform: scale(1.1);
+        }
+
+        #help-bot-panel {
+            background-color: white;
+            border-radius: 0.75rem;
+            /* rounded-xl */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            max-width: 90vw;
+            /* Responsive width */
+            padding: 1.5rem;
+            margin-top: 1rem;
+            transform: translateY(20px);
+            opacity: 0;
+            visibility: hidden;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out, visibility 0.3s;
+        }
+
+        #help-bot-panel.active {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .highlighted-text {
+            background-color: yellow;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+    <!-- Header Section -->
+    <header class="bg-blue-800 text-white shadow-lg fixed w-full z-50">
+        <nav class="container mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <img src="https://placehold.co/50x50/ffffff/000000?text=LABEEC" alt="LABEEC Logo" class="rounded-full">
+                <a href="#"
+                    class="text-2xl font-bold rounded-md px-2 py-1 hover:bg-blue-700 transition-colors duration-300">LABEEC</a>
+            </div>
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex space-x-8">
+                <a href="#inicio"
+                    class="hover:text-blue-200 transition-colors duration-300 py-2 px-3 rounded-md hover:bg-blue-700">Início</a>
+                <a href="#sobre"
+                    class="hover:text-blue-200 transition-colors duration-300 py-2 px-3 rounded-md hover:bg-blue-700">Sobre
+                    Nós</a>
+                <a href="#colecao"
+                    class="hover:text-blue-200 transition-colors duration-300 py-2 px-3 rounded-md hover:bg-blue-700">Coleção</a>
+                <a href="/colecao"
+                    class="hover:text-blue-200 transition-colors duration-300 py-2 px-3 rounded-md hover:bg-blue-700">Enviar
+                    coleção</a>
+                <a href="#publicacoes"
+                    class="hover:text-blue-200 transition-colors duration-300 py-2 px-3 rounded-md hover:bg-blue-700">Publicações</a>
+                <a href="#equipe"
+                    class="hover:text-blue-200 transition-colors duration-300 py-2 px-3 rounded-md hover:bg-blue-700">Equipe</a>
+                <a href="#ppbio"
+                    class="hover:text-blue-200 transition-colors duration-300 py-2 px-3 rounded-md hover:bg-blue-700">PPBIO</a>
+                <a href="#contato"
+                    class="hover:text-blue-200 transition-colors duration-300 py-2 px-3 rounded-md hover:bg-blue-700">Contato</a>
+            </div>
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden">
+                <button id="mobile-menu-button"
+                    class="text-white focus:outline-none focus:ring-2 focus:ring-blue-300 p-2 rounded-md">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-blue-700">
+            <a href="#inicio"
+                class="block py-3 px-6 text-white hover:bg-blue-600 transition-colors duration-300 border-b border-blue-600">Início</a>
+            <a href="#sobre"
+                class="block py-3 px-6 text-white hover:bg-blue-600 transition-colors duration-300 border-b border-blue-600">Sobre
+                Nós</a>
+            <a href="#colecao"
+                class="block py-3 px-6 text-white hover:bg-blue-600 transition-colors duration-300 border-b border-blue-600">Coleção</a>
+            <a href="#publicacoes"
+                class="block py-3 px-6 text-white hover:bg-blue-600 transition-colors duration-300 border-b border-blue-600">Publicações</a>
+            <a href="#equipe"
+                class="block py-3 px-6 text-white hover:bg-blue-600 transition-colors duration-300 border-b border-blue-600">Equipe</a>
+            <a href="#ppbio"
+                class="block py-3 px-6 text-white hover:bg-blue-600 transition-colors duration-300 border-b border-blue-600">PPBIO</a>
+            <a href="#contato"
+                class="block py-3 px-6 text-white hover:bg-blue-600 transition-colors duration-300">Contato</a>
+        </div>
+    </header>
+
+    <main class="pt-24"> <!-- Padding-top to account for fixed header -->
+        <!-- Hero Section -->
+        <section id="inicio"
+            class="relative bg-gradient-to-r from-blue-600 to-blue-900 text-white py-20 md:py-32 flex items-center justify-center min-h-screen-75">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-6xl font-extrabold mb-4 animate-fade-in-down">LABEEC</h1>
+                <h2 class="text-xl md:text-3xl font-light mb-8 animate-fade-in-up">Laboratório de Ecologia de Crustáceos
+                    da UFRN</h2>
+                <p class="text-lg md:text-xl max-w-2xl mx-auto mb-10 opacity-90 animate-fade-in">
+                    Dedicado ao estudo da diversidade, ecologia e conservação de crustáceos marinhos e de água doce.
+                </p>
+                <a href="#sobre"
+                    class="bg-white text-blue-800 font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-blue-100 transition-all duration-300 transform hover:scale-105">Saiba
+                    Mais</a>
+            </div>
+            <!-- Background pattern for hero section (optional but nice touch) -->
+            <div class="absolute inset-0 bg-pattern opacity-10 pointer-events-none"></div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="sobre" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-blue-700">Sobre o LABEEC</h2>
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <p class="text-lg leading-relaxed mb-6">
+                            O Laboratório de Ecologia de Crustáceos (LABEEC) da Universidade Federal do Rio Grande do
+                            Norte (UFRN) é um centro de pesquisa dedicado ao estudo aprofundado dos crustáceos, um dos
+                            grupos mais diversos e ecologicamente importantes do reino animal.
+                        </p>
+                        <p class="text-lg leading-relaxed mb-6">
+                            Nossa missão é gerar conhecimento científico de ponta sobre a biologia, ecologia,
+                            distribuição e conservação desses organismos, contribuindo para a compreensão dos
+                            ecossistemas aquáticos e para o desenvolvimento de estratégias de manejo e preservação.
+                        </p>
+                        <p class="text-lg leading-relaxed">
+                            No LABEEC, unimos pesquisa básica e aplicada, formando novos pesquisadores e difundindo o
+                            conhecimento para a comunidade científica e o público em geral.
+                        </p>
+                    </div>
+                    <div class="flex justify-center">
+                        <img src="https://placehold.co/600x400/D1E7FF/3B82F6?text=Laboratorio+LABEEC"
+                            alt="Imagem do Laboratório LABEEC"
+                            class="rounded-lg shadow-xl w-full max-w-md md:max-w-full">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Collection Section -->
+        <section id="colecao" class="py-16 md:py-24 bg-blue-50">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-blue-700">Nossa Coleção de Crustáceos
+                </h2>
+                <p class="text-center text-lg max-w-3xl mx-auto mb-12 text-gray-700">
+                    A coleção do LABEEC abriga uma vasta diversidade de espécies de crustáceos, coletadas em diversos
+                    biomas aquáticos do Brasil. Cada exemplar é cuidadosamente catalogado e preservado para fins de
+                    pesquisa e educação.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Crustacean Item 1 -->
+                    <div
+                        class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                        <img src="https://placehold.co/400x250/A3E6FF/000000?text=Litopenaeus+vannamei"
+                            alt="Litopenaeus vannamei" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-800">Litopenaeus vannamei</h3>
+                            <p class="text-sm text-gray-600 mb-4">Camarão-branco-do-Pacífico</p>
+                            <p class="text-gray-700 text-base leading-relaxed">
+                                Espécie de camarão amplamente cultivada globalmente, de grande importância econômica.
+                                Ocorre em estuários e áreas costeiras.
+                            </p>
+                            <button
+                                class="mt-4 bg-blue-600 text-white py-2 px-4 rounded-full text-sm hover:bg-blue-700 transition-colors duration-300">Ver
+                                Detalhes</button>
+                        </div>
+                    </div>
+
+                    <!-- Crustacean Item 2 -->
+                    <div
+                        class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                        <img src="https://placehold.co/400x250/C8E6C9/000000?text=Ucides+cordatus" alt="Ucides cordatus"
+                            class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-800">Ucides cordatus</h3>
+                            <p class="text-sm text-gray-600 mb-4">Caranguejo-uçá</p>
+                            <p class="text-gray-700 text-base leading-relaxed">
+                                Espécie de caranguejo de mangue, símbolo da fauna costeira brasileira, com grande
+                                importância ecológica e cultural.
+                            </p>
+                            <button
+                                class="mt-4 bg-blue-600 text-white py-2 px-4 rounded-full text-sm hover:bg-blue-700 transition-colors duration-300">Ver
+                                Detalhes</button>
+                        </div>
+                    </div>
+
+                    <!-- Crustacean Item 3 -->
+                    <div
+                        class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                        <img src="https://placehold.co/400x250/FFDDC1/000000?text=Callinectes+sapidus"
+                            alt="Callinectes sapidus" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-800">Callinectes sapidus</h3>
+                            <p class="text-sm text-gray-600 mb-4">Siri-azul</p>
+                            <p class="text-gray-700 text-base leading-relaxed">
+                                Siri de ampla distribuição, encontrado em estuários e águas costeiras. Possui grande
+                                valor comercial em diversas regiões.
+                            </p>
+                            <button
+                                class="mt-4 bg-blue-600 text-white py-2 px-4 rounded-full text-sm hover:bg-blue-700 transition-colors duration-300">Ver
+                                Detalhes</button>
+                        </div>
+                    </div>
+
+                    <!-- Crustacean Item 4 -->
+                    <div
+                        class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                        <img src="https://placehold.co/400x250/FFE0B2/000000?text=Armases+cinereum"
+                            alt="Armases cinereum" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-800">Armases cinereum</h3>
+                            <p class="text-sm text-gray-600 mb-4">Caranguejo fantasma</p>
+                            <p class="text-gray-700 text-base leading-relaxed">
+                                Pequeno caranguejo encontrado em praias arenosas, conhecido por sua coloração que o
+                                camufla na areia.
+                            </p>
+                            <button
+                                class="mt-4 bg-blue-600 text-white py-2 px-4 rounded-full text-sm hover:bg-blue-700 transition-colors duration-300">Ver
+                                Detalhes</button>
+                        </div>
+                    </div>
+
+                    <!-- Crustacean Item 5 -->
+                    <div
+                        class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                        <img src="https://placehold.co/400x250/D2E8FF/000000?text=Palaemon+elegans"
+                            alt="Palaemon elegans" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-800">Palaemon elegans</h3>
+                            <p class="text-sm text-gray-600 mb-4">Camarão-fantasma-do-Mediterrâneo</p>
+                            <p class="text-gray-700 text-base leading-relaxed">
+                                Espécie de camarão comum em águas costeiras e estuários, amplamente estudado em
+                                ecotoxicologia.
+                            </p>
+                            <button
+                                class="mt-4 bg-blue-600 text-white py-2 px-4 rounded-full text-sm hover:bg-blue-700 transition-colors duration-300">Ver
+                                Detalhes</button>
+                        </div>
+                    </div>
+
+                    <!-- Crustacean Item 6 -->
+                    <div
+                        class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                        <img src="https://placehold.co/400x250/CFFDD1/000000?text=Emerita+analoga" alt="Emerita analoga"
+                            class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-800">Emerita analoga</h3>
+                            <p class="text-sm text-gray-600 mb-4">Tatuzinho-da-praia</p>
+                            <p class="text-gray-700 text-base leading-relaxed">
+                                Pequeno crustáceo que vive enterrado na areia, filtrando partículas da água. Indicador
+                                de qualidade ambiental.
+                            </p>
+                            <button
+                                class="mt-4 bg-blue-600 text-white py-2 px-4 rounded-full text-sm hover:bg-blue-700 transition-colors duration-300">Ver
+                                Detalhes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Publications Section -->
+        <section id="publicacoes" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-blue-700">Publicações Recentes</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Publication Item 1 -->
+                    <div class="bg-blue-50 p-6 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg">
+                        <h3 class="text-xl font-semibold mb-3 text-blue-800">Impacto da poluição na reprodução de
+                            crustáceos</h3>
+                        <p class="text-gray-700 mb-3">
+                            <span class="font-medium">Autores:</span> Silva, A.; Santos, B.; Costa, C.
+                        </p>
+                        <p class="text-gray-700 mb-3">
+                            <span class="font-medium">Periódico:</span> Journal of Marine Biology, Vol. 45, Nº 2, pp.
+                            123-130.
+                        </p>
+                        <p class="text-sm text-gray-600">
+                            Publicado em: 2024
+                        </p>
+                        <a href="#" class="inline-block mt-4 text-blue-600 hover:underline">Acessar Artigo Completo</a>
+                    </div>
+
+                    <!-- Publication Item 2 -->
+                    <div class="bg-blue-50 p-6 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg">
+                        <h3 class="text-xl font-semibold mb-3 text-blue-800">Diversidade de Decápodes em Manguezais do
+                            Nordeste Brasileiro</h3>
+                        <p class="text-gray-700 mb-3">
+                            <span class="font-medium">Autores:</span> Oliveira, D.; Pereira, E.; Almeida, F.
+                        </p>
+                        <p class="text-gray-700 mb-3">
+                            <span class="font-medium">Periódico:</span> Brazilian Journal of Aquatic Science, Vol. 10,
+                            Nº 1, pp. 50-65.
+                        </p>
+                        <p class="text-sm text-gray-600">
+                            Publicado em: 2023
+                        </p>
+                        <a href="#" class="inline-block mt-4 text-blue-600 hover:underline">Acessar Artigo Completo</a>
+                    </div>
+                    <!-- Publication Item 3 -->
+                    <div class="bg-blue-50 p-6 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg">
+                        <h3 class="text-xl font-semibold mb-3 text-blue-800">Filogenia molecular de Caranguejos de Água
+                            Doce</h3>
+                        <p class="text-gray-700 mb-3">
+                            <span class="font-medium">Autores:</span> Rodrigues, G.; Lima, H.; Nunes, I.
+                        </p>
+                        <p class="text-gray-700 mb-3">
+                            <span class="font-medium">Periódico:</span> Ecology and Evolution, Vol. 15, Nº 3, pp.
+                            200-215.
+                        </p>
+                        <p class="text-sm text-gray-600">
+                            Publicado em: 2023
+                        </p>
+                        <a href="#" class="inline-block mt-4 text-blue-600 hover:underline">Acessar Artigo Completo</a>
+                    </div>
+                    <!-- Publication Item 4 -->
+                    <div class="bg-blue-50 p-6 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg">
+                        <h3 class="text-xl font-semibold mb-3 text-blue-800">Efeitos do aquecimento global na
+                            distribuição de anfípodes</h3>
+                        <p class="text-gray-700 mb-3">
+                            <span class="font-medium">Autores:</span> Souza, J.; Fernandes, K.; Gomes, L.
+                        </p>
+                        <p class="text-gray-700 mb-3">
+                            <span class="font-medium">Periódico:</span> Climate Change Research, Vol. 8, Nº 4, pp.
+                            300-310.
+                        </p>
+                        <p class="text-sm text-gray-600">
+                            Publicado em: 2022
+                        </p>
+                        <a href="#" class="inline-block mt-4 text-blue-600 hover:underline">Acessar Artigo Completo</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section id="equipe" class="py-16 md:py-24 bg-blue-100">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-blue-700">Nossa Equipe</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Team Member 1 -->
+                    <div
+                        class="bg-white p-6 rounded-xl shadow-lg text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                        <img src="https://placehold.co/120x120/EBF8FF/2B6CB0?text=Prof+Ana" alt="Professora Ana Clara"
+                            class="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-blue-200">
+                        <h3 class="text-xl font-semibold mb-2 text-blue-800">Prof. Ana Clara</h3>
+                        <p class="text-blue-600 mb-3">Coordenadora do LABEEC</p>
+                        <p class="text-gray-700 text-sm">
+                            Especialista em ecologia de crustáceos decápodes e taxonomia.
+                        </p>
+                    </div>
+                    <!-- Team Member 2 -->
+                    <div
+                        class="bg-white p-6 rounded-xl shadow-lg text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                        <img src="https://placehold.co/120x120/EBF8FF/2B6CB0?text=Dr+João" alt="Dr. João Pedro"
+                            class="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-blue-200">
+                        <h3 class="text-xl font-semibold mb-2 text-blue-800">Dr. João Pedro</h3>
+                        <p class="text-blue-600 mb-3">Pesquisador Sênior</p>
+                        <p class="text-gray-700 text-sm">
+                            Foco em biogeografia e conservação de espécies ameaçadas.
+                        </p>
+                    </div>
+                    <!-- Team Member 3 -->
+                    <div
+                        class="bg-white p-6 rounded-xl shadow-lg text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                        <img src="https://placehold.co/120x120/EBF8FF/2B6CB0?text=Maria" alt="Maria Fernanda"
+                            class="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-blue-200">
+                        <h3 class="text-xl font-semibold mb-2 text-blue-800">Maria Fernanda</h3>
+                        <p class="text-blue-600 mb-3">Estudante de Doutorado</p>
+                        <p class="text-gray-700 text-sm">
+                            Pesquisa sobre ecotoxicologia em camarões.
+                        </p>
+                    </div>
+                    <!-- Team Member 4 -->
+                    <div
+                        class="bg-white p-6 rounded-xl shadow-lg text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                        <img src="https://placehold.co/120x120/EBF8FF/2B6CB0?text=Carlos" alt="Carlos Alberto"
+                            class="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-blue-200">
+                        <h3 class="text-xl font-semibold mb-2 text-blue-800">Carlos Alberto</h3>
+                        <p class="text-blue-600 mb-3">Estudante de Mestrado</p>
+                        <p class="text-gray-700 text-sm">
+                            Estudo da dieta de caranguejos de mangue.
+                        </p>
+                    </div>
+                    <!-- Team Member 5 -->
+                    <div
+                        class="bg-white p-6 rounded-xl shadow-lg text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                        <img src="https://placehold.co/120x120/EBF8FF/2B6CB0?text=Laura" alt="Laura Rodrigues"
+                            class="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-blue-200">
+                        <h3 class="text-xl font-semibold mb-2 text-blue-800">Laura Rodrigues</h3>
+                        <p class="text-blue-600 mb-3">Pesquisadora de Iniciação Científica</p>
+                        <p class="text-gray-700 text-sm">
+                            Auxílio na catalogação da coleção e análises laboratoriais.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PPBIO Section -->
+        <section id="ppbio" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-blue-700">PPBIO - Programa de Pesquisa
+                    em Biodiversidade</h2>
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <p class="text-lg leading-relaxed mb-6">
+                            O PPBIO é uma iniciativa do Ministério da Ciência, Tecnologia e Inovações (MCTI) que busca o
+                            conhecimento, conservação e uso sustentável da biodiversidade brasileira. O LABEEC participa
+                            ativamente das ações do PPBIO, contribuindo com dados e pesquisas sobre a fauna de
+                            crustáceos.
+                        </p>
+                        <p class="text-lg leading-relaxed mb-6">
+                            Nossas atividades dentro do PPBIO incluem monitoramento de populações, levantamento de
+                            espécies em diferentes biomas, e a integração de dados para a criação de bases de
+                            conhecimento robustas.
+                        </p>
+                        <p class="text-lg leading-relaxed">
+                            Essa colaboração é fundamental para fortalecer as estratégias de conservação e para a
+                            formação de uma rede nacional de pesquisa em biodiversidade.
+                        </p>
+                        <a href="https://ppbio.inpa.gov.br/" target="_blank"
+                            class="inline-block mt-6 bg-blue-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300">
+                            Visitar Site Oficial do PPBIO
+                        </a>
+                    </div>
+                    <div class="flex justify-center">
+                        <img src="https://placehold.co/600x400/CCE0FF/000000?text=PPBIO+Logo+ou+Imagem"
+                            alt="PPBIO Logo ou Imagem relacionada"
+                            class="rounded-lg shadow-xl w-full max-w-md md:max-w-full">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contato" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-blue-700">Entre em Contato</h2>
+                <div class="max-w-xl mx-auto bg-blue-50 p-8 rounded-xl shadow-lg">
+                    <p class="text-lg text-gray-700 mb-6 text-center">
+                        Para mais informações sobre o LABEEC, parcerias ou dúvidas, entre em contato conosco.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <svg class="w-6 h-6 text-blue-600 mr-3" fill="currentColor" viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                            </svg>
+                            <p class="text-gray-800">Email: <a href="mailto:labeec@ufrn.br"
+                                    class="text-blue-600 hover:underline">labeec@ufrn.br</a></p>
+                        </div>
+                        <div class="flex items-center">
+                            <svg class="w-6 h-6 text-blue-600 mr-3" fill="currentColor" viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M14.243 5.757a6 6 0 10-.987 1.016l-.014.017A4 4 0 0110 16.5a4 4 0 01-3.243-6.243 6.001 6.001 0 007.486-4.5zM10 15a3 3 0 100-6 3 3 0 000 6z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                            <p class="text-gray-800">Endereço: Centro de Biociências, UFRN, Natal/RN</p>
+                        </div>
+                        <div class="flex items-center">
+                            <svg class="w-6 h-6 text-blue-600 mr-3" fill="currentColor" viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.774a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z">
+                                </path>
+                            </svg>
+                            <p class="text-gray-800">Telefone: (84) 99999-9999</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-6 text-center text-sm">
+            <p>&copy; 2024 LABEEC - Laboratório de Ecologia de Crustáceos | UFRN. Todos os direitos reservados.</p>
+            <p class="mt-2">Desenvolvido com <span class="text-red-500">&hearts;</span> para a ciência.</p>
+        </div>
+    </footer>
+
+    <!-- Help Bot Container -->
+    <div id="help-bot-container">
+        <button id="help-bot-button" class="flex items-center justify-center text-white text-lg font-bold">
+            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.732-1A3 3 0 0113 8a3 3 0 01-3 3v2a1 1 0 110 2h-1a1 1 0 110-2 1 1 0 001-1V8a1 1 0 00-1-1z"
+                    clip-rule="evenodd"></path>
+            </svg>
+        </button>
+        <div id="help-bot-panel" class="hidden">
+            <h3 class="text-lg font-bold text-blue-700 mb-4">Bot de Ajuda</h3>
+            <div class="flex space-x-2 mb-4">
+                <input type="text" id="search-input" placeholder="Pesquisar na página..."
+                    class="flex-grow p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <button id="search-button"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-300">Buscar</button>
+            </div>
+            <button id="clear-highlight-button"
+                class="w-full bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 transition-colors duration-300">Limpar
+                Destaques</button>
+        </div>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                const headerOffset = document.querySelector('header').offsetHeight; // Height of the fixed header
+
+                if (targetElement) {
+                    const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                    const offsetPosition = elementPosition - headerOffset - 20; // Additional offset for spacing
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                }
+
+                // Close mobile menu if open
+                const mobileMenu = document.getElementById('mobile-menu');
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking outside (optional, but good UX)
+        document.addEventListener('click', (event) => {
+            const isClickInside = mobileMenu.contains(event.target) || mobileMenuButton.contains(event.target);
+            if (!isClickInside && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+
+        // Hide mobile menu on resize for larger screens
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768 && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+
+        // Help Bot Logic
+        const helpBotButton = document.getElementById('help-bot-button');
+        const helpBotPanel = document.getElementById('help-bot-panel');
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const clearHighlightButton = document.getElementById('clear-highlight-button');
+
+        let originalBodyContent = document.body.innerHTML; // Store original content to restore
+
+        helpBotButton.addEventListener('click', () => {
+            helpBotPanel.classList.toggle('hidden');
+            if (!helpBotPanel.classList.contains('hidden')) {
+                // Add active class for transition
+                setTimeout(() => helpBotPanel.classList.add('active'), 10); // Small delay for CSS transition
+            } else {
+                helpBotPanel.classList.remove('active');
+            }
+        });
+
+        searchButton.addEventListener('click', () => {
+            performSearch();
+        });
+
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        clearHighlightButton.addEventListener('click', () => {
+            clearHighlights();
+        });
+
+        function performSearch() {
+            clearHighlights(); // Always clear previous highlights first
+            const searchTerm = searchInput.value.trim();
+            if (searchTerm === "") {
+                return;
+            }
+
+            const regex = new RegExp(`(${searchTerm})`, 'gi'); // Case-insensitive, global search
+            let newBodyContent = originalBodyContent.replace(regex, `<span class="highlighted-text">$1</span>`);
+
+            // Apply the new content. This is a simple but potentially disruptive way.
+            // For more complex sites, a library like Mark.js is recommended.
+            document.body.innerHTML = newBodyContent;
+
+            // Scroll to the first highlighted instance if found
+            const firstHighlight = document.querySelector('.highlighted-text');
+            if (firstHighlight) {
+                firstHighlight.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function clearHighlights() {
+            // Restore the original content to remove highlights
+            document.body.innerHTML = originalBodyContent;
+            // Re-attach event listeners after innerHTML replacement
+            rebindEventListeners();
+        }
+
+        function rebindEventListeners() {
+            // Re-bind smooth scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    const headerOffset = document.querySelector('header').offsetHeight;
+                    if (targetElement) {
+                        const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                        const offsetPosition = elementPosition - headerOffset - 20;
+                        window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+                    }
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            // Re-bind mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenuButton && mobileMenu) { // Check if elements exist after re-render
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+                document.addEventListener('click', (event) => {
+                    const isClickInside = mobileMenu.contains(event.target) || mobileMenuButton.contains(event.target);
+                    if (!isClickInside && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            }
+            // Re-bind help bot logic as well if its elements were part of originalBodyContent
+            // For now, help bot elements are outside the main body content manipulation (fixed position)
+            // but if they were dynamic, they would need re-binding.
+            // In this specific case, the help bot container is fixed and its children are manipulated,
+            // so helpBotButton, searchInput, searchButton, clearHighlightButton still retain their listeners.
+        }
+
+        // Initial rebind after page load to ensure all listeners are set up, even if not strictly needed for this version
+        // This is good practice for dynamic content.
+        window.addEventListener('load', () => {
+            originalBodyContent = document.body.innerHTML; // Capture the final HTML after browser render
+            rebindEventListeners(); // Ensure all listeners are active after initial content load
+        });
+    </script>
+</body>
+
+</html>

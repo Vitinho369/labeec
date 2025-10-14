@@ -1,0 +1,7 @@
+django
+openpyxl
+xlrd
+pandas
+dotenv
+dj-database-url 
+psycopg2-binary
